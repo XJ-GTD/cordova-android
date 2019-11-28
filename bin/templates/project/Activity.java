@@ -28,7 +28,24 @@ public class __ACTIVITY__ extends CordovaActivity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        
+        //华为机型连接华为服务器
+        if (OSHelper.isEmui()){
+            HMSAgent.connect(this, new ConnectHandler() {
+                @Override
+                public void onConnect(int rst) {
+                    System.out.println("HMS connect end:" + rst);
+                    HMSAgent.Push.getToken(new GetTokenHandler() {
+                        @Override
+                        public void onResult(int rst) {
+                            System.out.println("get token: end" + rst);
 
+                        }
+                    });
+
+                }
+            });
+        }
         // enable Cordova apps to be started in the background
         Bundle extras = getIntent().getExtras();
         if (extras != null && extras.getBoolean("cdvStartInBackground", false)) {
